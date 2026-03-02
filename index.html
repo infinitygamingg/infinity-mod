@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>INFINITY MOD — GTA 5 TikTok Live Interactive Mods</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#050508;--bg2:#07070d;--surface:#0d0d16;--surface2:#12121e;--accent:#00f0ff;--accent2:#ff2d6b;--accent3:#7b2fff;--gold:#ffc940;--text:#e8e8f0;--muted:#5a5a78;--border:rgba(0,240,255,0.12);--border2:rgba(255,255,255,0.06);}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow-x:hidden;cursor:none;}
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .2s,height .2s;}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(0,240,255,0.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.5;}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:9989;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(5,5,8,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;transition:color .3s;position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform .3s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-actions{display:flex;gap:12px;align-items:center;}
+
+/* ── NAV: logged-out ── */
+.btn-signin{background:transparent;border:1px solid var(--border2);color:var(--muted);padding:9px 24px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+.btn-signin:hover{border-color:var(--accent);color:var(--accent);}
+.btn-getstarted{background:linear-gradient(135deg,var(--accent),var(--accent3));color:var(--bg);border:none;padding:9px 28px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+.btn-getstarted:hover{filter:brightness(1.15);box-shadow:0 0 24px rgba(0,240,255,.35);}
+
+/* ── NAV: logged-in ── */
+.nav-user-wrap{display:none;align-items:center;gap:10px;}
+.nav-user-wrap.visible{display:flex;}
+.nav-user-pill{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:rgba(0,240,255,.04);padding:7px 14px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+.nav-user-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;animation:blink 2s infinite;}
+.nav-user-email{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:1px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-signout{background:none;border:1px solid rgba(255,45,107,.3);color:var(--accent2);padding:7px 18px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+.btn-signout:hover{background:var(--accent2);color:#fff;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:5000;display:none;align-items:center;justify-content:center;}
+.modal-overlay.active{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);width:100%;max-width:420px;padding:48px 44px 40px;position:relative;animation:modalIn .3s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent3),var(--accent),var(--accent2));}
+.modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--muted);font-size:22px;cursor:none;transition:color .3s;font-family:'Share Tech Mono',monospace;}
+.modal-close:hover{color:var(--accent2);}
+.modal-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:28px;letter-spacing:.5px;}
+.modal-tabs{display:flex;margin-bottom:28px;border-bottom:1px solid var(--border);}
+.modal-tab{flex:1;padding:12px;background:none;border:none;color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.modal-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:7px;font-family:'Share Tech Mono',monospace;}
+.form-input{width:100%;background:var(--bg2);border:1px solid var(--border2);color:var(--text);padding:12px 16px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:500;outline:none;transition:border-color .3s;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);}
+.form-input:focus{border-color:var(--accent);}
+.form-input::placeholder{color:var(--muted);}
+.btn-submit{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent3));color:var(--bg);border:none;padding:14px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);margin-top:6px;}
+.btn-submit:not(:disabled):hover{filter:brightness(1.1);box-shadow:0 10px 30px rgba(0,240,255,.3);}
+.btn-submit:disabled{opacity:.55;cursor:default;}
+.modal-footer-note{text-align:center;margin-top:20px;font-size:13px;color:var(--muted);}
+.modal-footer-note a{color:var(--accent);text-decoration:none;cursor:none;}
+.modal-footer-note a:hover{text-decoration:underline;}
+
+/* ── Google button ── */
+.modal-divider{display:flex;align-items:center;gap:12px;margin:18px 0 4px;}
+.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.modal-divider-text{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;}
+.btn-google{width:100%;background:transparent;border:1px solid var(--border2);color:var(--text);padding:12px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;}
+.btn-google:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.03);}
+.btn-google svg{flex-shrink:0;}
+
+/* ── Form error inline ── */
+.form-error{display:none;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent2);letter-spacing:1px;margin-top:12px;padding:9px 12px;border-left:2px solid var(--accent2);background:rgba(255,45,107,.06);}
+.form-error.show{display:block;}
+
+/* ── Toast notification ── */
+.toast-bar{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(16px);opacity:0;z-index:9999;padding:11px 26px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;transition:all .35s cubic-bezier(.22,.68,0,1.2);pointer-events:none;white-space:nowrap;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);}
+.toast-bar.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast-bar.success{background:rgba(0,240,255,.1);border:1px solid var(--accent);color:var(--accent);}
+.toast-bar.error{background:rgba(255,45,107,.1);border:1px solid var(--accent2);color:var(--accent2);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:120px 40px 80px;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,240,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,240,255,0.035) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 85% 85% at 50% 50%,black 20%,transparent 100%);}
+.orb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.2;}
+.orb-1{width:700px;height:700px;background:var(--accent3);top:-250px;left:-250px;animation:orb1 9s ease-in-out infinite;}
+.orb-2{width:500px;height:500px;background:var(--accent2);bottom:-200px;right:-150px;animation:orb2 11s ease-in-out infinite;}
+.orb-3{width:350px;height:350px;background:var(--accent);top:50%;left:50%;animation:orb3 7s ease-in-out infinite;}
+@keyframes orb1{0%,100%{transform:translate(0,0);}50%{transform:translate(40px,-30px);}}
+@keyframes orb2{0%,100%{transform:translate(0,0);}50%{transform:translate(-30px,40px);}}
+@keyframes orb3{0%,100%{transform:translate(-50%,-50%);}50%{transform:translate(-50%,calc(-50% - 25px));}}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(0,240,255,0.25);padding:6px 18px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:3px;margin-bottom:28px;position:relative;z-index:1;animation:fadeUp .8s ease both;}
+.hero-badge-dot{width:5px;height:5px;background:var(--accent);border-radius:50%;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,13vw,170px);line-height:.88;text-align:center;position:relative;z-index:1;animation:fadeUp .8s ease .15s both;}
+.title-top{display:block;color:rgba(255,255,255,.85);letter-spacing:4px;}
+.title-main{display:block;background:linear-gradient(135deg,var(--accent) 0%,var(--accent3) 50%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 50px rgba(0,240,255,.4));letter-spacing:10px;position:relative;}
+.title-main::before,.title-main::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;background:inherit;-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.title-main::before{animation:glitch1 5s infinite;}
+.title-main::after{animation:glitch2 5s infinite;}
+@keyframes glitch1{0%,94%,100%{opacity:0;}95%{opacity:.7;transform:translate(-5px,2px);clip-path:polygon(0 0,100% 0,100% 33%,0 33%);}97%{opacity:0;}}
+@keyframes glitch2{0%,91%,100%{opacity:0;}92%{opacity:.7;transform:translate(5px,-2px);clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);}94%{opacity:0;}}
+.hero-sub{font-size:17px;font-weight:500;color:var(--muted);text-align:center;max-width:520px;margin:24px 0 44px;line-height:1.7;letter-spacing:.5px;position:relative;z-index:1;animation:fadeUp .8s ease .3s both;}
+.hero-btns{display:flex;gap:16px;position:relative;z-index:1;animation:fadeUp .8s ease .45s both;}
+.btn-hp{background:linear-gradient(135deg,var(--accent),var(--accent3));color:var(--bg);border:none;padding:15px 44px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);text-decoration:none;}
+.btn-hp:hover{transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,240,255,.35);}
+.btn-hs{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.15);padding:15px 44px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all .3s;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);text-decoration:none;}
+.btn-hs:hover{border-color:var(--accent);color:var(--accent);}
+.hero-stats{display:flex;gap:56px;margin-top:72px;position:relative;z-index:1;animation:fadeUp .8s ease .6s both;}
+.hstat{text-align:center;position:relative;}
+.hstat+.hstat::before{content:'';position:absolute;left:-28px;top:50%;transform:translateY(-50%);width:1px;height:36px;background:var(--border);}
+.hstat-num{font-family:'Bebas Neue',sans-serif;font-size:38px;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+.hstat-label{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.scroll-hint{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;z-index:1;animation:fadeUp 1s ease 1s both;}
+.scroll-line{width:1px;height:36px;background:linear-gradient(180deg,var(--accent),transparent);animation:scrollP 2s ease-in-out infinite;}
+@keyframes scrollP{0%,100%{opacity:1;}50%{opacity:.3;}}
+.scroll-txt{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface);padding:12px 0;}
+.ticker{display:flex;animation:tick 28s linear infinite;width:max-content;}
+.ticker-item{display:flex;align-items:center;gap:32px;padding:0 32px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;white-space:nowrap;}
+.tdot{width:4px;height:4px;background:var(--accent);border-radius:50%;flex-shrink:0;}
+@keyframes tick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* SECTIONS */
+.section{padding:96px 60px;max-width:1400px;margin:0 auto;}
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 60px;}
+.slabel{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.slabel::before{content:'';width:28px;height:1px;background:var(--accent);}
+.stitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,68px);line-height:1;margin-bottom:16px;}
+.sdesc{font-size:16px;color:var(--muted);max-width:560px;line-height:1.7;}
+
+/* MODS */
+.mods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;border:1px solid var(--border);}
+.mod-card{background:var(--surface);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .4s;}
+.mod-card:hover{background:var(--surface2);}
+.mod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .5s;}
+.mod-card.koth::before{background:linear-gradient(90deg,var(--gold),#e68900);}
+.mod-card.survive::before{background:linear-gradient(90deg,var(--accent2),#c4003f);}
+.mod-card.last::before{background:linear-gradient(90deg,var(--accent),var(--accent3));}
+.mod-card:hover::before{transform:scaleX(1);}
+.mod-top{padding:40px 36px 28px;flex:1;}
+.mod-tag{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:4px 12px;margin-bottom:22px;}
+.mod-tag.koth{color:var(--gold);border:1px solid rgba(255,201,64,.25);}
+.mod-tag.survive{color:var(--accent2);border:1px solid rgba(255,45,107,.25);}
+.mod-tag.last{color:var(--accent);border:1px solid rgba(0,240,255,.25);}
+.tag-dot{width:4px;height:4px;border-radius:50%;background:currentColor;animation:blink 2s infinite;}
+.mod-icon{font-size:42px;margin-bottom:18px;display:block;}
+.mod-name{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px;margin-bottom:8px;color:#fff;}
+.mod-tagline{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:26px;}
+.mod-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:0;}
+.mod-feats li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:rgba(232,232,240,.65);line-height:1.4;}
+.mod-feats li .arr{font-family:'Share Tech Mono',monospace;font-size:11px;flex-shrink:0;margin-top:1px;}
+.mod-feats li .arr.k{color:var(--gold);}
+.mod-feats li .arr.s{color:var(--accent2);}
+.mod-feats li .arr.l{color:var(--accent);}
+.mod-bottom{padding:22px 36px;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.mod-price-info{display:flex;flex-direction:column;}
+.mod-trial{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:3px;}
+.mod-price{font-family:'Bebas Neue',sans-serif;font-size:30px;color:#fff;}
+.mod-period{font-size:12px;color:var(--muted);}
+.btn-mod{padding:10px 22px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:none;transition:all .3s;border:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+.btn-mod.koth{background:linear-gradient(135deg,var(--gold),#c97800);color:#000;}
+.btn-mod.survive{background:linear-gradient(135deg,var(--accent2),#a01040);color:#fff;}
+.btn-mod.last{background:linear-gradient(135deg,var(--accent),var(--accent3));color:#000;}
+.btn-mod:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.5);}
+
+/* HOW */
+.how-bg{background:var(--bg2);padding:96px 0;position:relative;}
+.how-bg::before,.how-bg::after{content:'';position:absolute;left:0;right:0;height:1px;}
+.how-bg::before{top:0;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+.how-bg::after{bottom:0;background:linear-gradient(90deg,transparent,var(--accent3),transparent);}
+.how-inner{max-width:1400px;margin:0 auto;padding:0 60px;}
+/* 7-step grid: top row 4 cols, bottom row 3 cols centred */
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:48px 0;margin-top:56px;position:relative;}
+.steps-grid::before{content:'';position:absolute;top:26px;left:4%;right:4%;height:1px;background:linear-gradient(90deg,var(--accent),var(--accent3),var(--accent2));opacity:.3;pointer-events:none;}
+.steps-row2{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:0 12%;}
+.step{padding:0 20px;text-align:center;}
+.step-num{width:52px;height:52px;border:1px solid var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--accent);margin:0 auto 22px;background:var(--bg2);position:relative;z-index:1;transition:all .3s;}
+.step:hover .step-num{background:var(--accent);color:var(--bg);box-shadow:0 0 28px rgba(0,240,255,.5);}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:10px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.65;}
+/* highlight step 3 (buy license) and step 7 (get key) */
+.step.accent-step .step-num{border-color:var(--gold);color:var(--gold);}
+.step.accent-step:hover .step-num{background:var(--gold);color:var(--bg);box-shadow:0 0 28px rgba(255,201,64,.5);}
+.step.accent-step .step-title{background:linear-gradient(135deg,var(--gold),#e68900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+/* Buy License modal */
+.buy-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);z-index:5100;display:none;align-items:center;justify-content:center;}
+.buy-modal-overlay.active{display:flex;}
+.buy-modal{background:var(--surface);border:1px solid var(--border);width:100%;max-width:500px;padding:44px 44px 40px;position:relative;animation:modalIn .3s ease;max-height:90vh;overflow-y:auto;}
+.buy-modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--accent),var(--accent2));}
+.buy-modal-close{position:absolute;top:16px;right:20px;background:none;border:none;color:var(--muted);font-size:22px;cursor:none;transition:color .3s;font-family:'Share Tech Mono',monospace;line-height:1;}
+.buy-modal-close:hover{color:var(--accent2);}
+.buy-modal-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;background:linear-gradient(135deg,var(--gold),#e68900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+.buy-modal-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:6px;}
+.buy-modal-sub{font-size:13px;color:var(--muted);margin-bottom:28px;letter-spacing:.5px;line-height:1.6;}
+/* Steps inside buy modal */
+.pay-steps{display:flex;flex-direction:column;gap:14px;margin-bottom:28px;}
+.pay-step{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border2);position:relative;}
+.pay-step::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--border);}
+.pay-step.done::before{background:var(--accent);}
+.pay-step.action::before{background:var(--gold);}
+.pay-step-num{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:2px;flex-shrink:0;margin-top:2px;min-width:24px;}
+.pay-step.done .pay-step-num{color:var(--accent);}
+.pay-step.action .pay-step-num{color:var(--gold);}
+.pay-step-text{font-size:14px;color:var(--text);line-height:1.6;}
+.pay-step-text strong{color:#fff;font-weight:700;}
+.pay-step-text .note{font-size:12px;color:var(--muted);display:block;margin-top:3px;}
+/* Social contact buttons */
+.contact-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.btn-discord{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;background:linear-gradient(135deg,#5865F2,#4752C4);color:#fff;border:none;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+.btn-discord:hover{filter:brightness(1.15);box-shadow:0 8px 28px rgba(88,101,242,.4);transform:translateY(-2px);}
+.btn-tiktok{display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 20px;background:linear-gradient(135deg,#010101,#2a2a2a);color:#fff;border:1px solid rgba(255,255,255,.12);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:none;transition:all .3s;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);}
+.btn-tiktok:hover{border-color:rgba(255,255,255,.35);box-shadow:0 8px 28px rgba(0,0,0,.5);transform:translateY(-2px);}
+.btn-discord svg,.btn-tiktok svg{flex-shrink:0;}
+.buy-modal-note{font-size:12px;color:var(--muted);line-height:1.7;text-align:center;padding:12px 16px;border:1px solid var(--border2);background:rgba(0,240,255,.02);}
+.buy-modal-note span{color:var(--accent);}
+/* Selected mod badge inside buy modal */
+.buy-mod-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;border:1px solid rgba(0,240,255,.2);color:var(--accent);}
+.buy-mod-badge.koth{color:var(--gold);border-color:rgba(255,201,64,.3);}
+.buy-mod-badge.survive{color:var(--accent2);border-color:rgba(255,45,107,.3);}
+.buy-mod-badge.last{color:var(--accent);border-color:rgba(0,240,255,.3);}
+
+/* PRICING TABLE */
+.ptable-wrap{margin-top:52px;border:1px solid var(--border);overflow:hidden;}
+.ptable{width:100%;border-collapse:collapse;}
+.ptable th{padding:18px 24px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);background:var(--surface);}
+.ptable th:not(:first-child){text-align:center;}
+.ptable td{padding:14px 24px;border-bottom:1px solid var(--border2);font-size:14px;color:rgba(232,232,240,.7);}
+.ptable td:not(:first-child){text-align:center;}
+.ptable tr:last-child td{border-bottom:none;}
+.ptable tr:hover td{background:rgba(255,255,255,.015);}
+.col-feat{background:rgba(0,240,255,.03);border-left:1px solid rgba(0,240,255,.2);border-right:1px solid rgba(0,240,255,.2);}
+.cy{color:var(--accent);font-family:'Share Tech Mono',monospace;font-size:13px;}
+.cn{color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:13px;}
+.price-cell{font-family:'Bebas Neue',sans-serif;font-size:26px;}
+.price-k{background:linear-gradient(135deg,var(--gold),#e68900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.price-s{background:linear-gradient(135deg,var(--accent2),#c4003f);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.price-l{background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* FAQ */
+.faq-list{margin-top:52px;display:flex;flex-direction:column;gap:2px;}
+.faq-item{background:var(--surface);border:1px solid var(--border2);overflow:hidden;}
+.faq-q{width:100%;background:none;border:none;color:var(--text);padding:22px 26px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;cursor:none;display:flex;align-items:center;justify-content:space-between;transition:color .3s;text-align:left;}
+.faq-q:hover{color:var(--accent);}
+.faq-icon{font-family:'Share Tech Mono',monospace;color:var(--accent);font-size:18px;flex-shrink:0;transition:transform .3s;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+.faq-item.open .faq-a{max-height:200px;}
+.faq-a-inner{padding:0 26px 22px;font-size:14px;color:var(--muted);line-height:1.7;border-top:1px solid var(--border2);}
+
+/* CTA */
+.cta-wrap{text-align:center;padding:110px 60px;position:relative;overflow:hidden;}
+.cta-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 50%,rgba(0,240,255,.07) 0%,transparent 100%);}
+.cta-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,8vw,96px);line-height:.95;margin-bottom:20px;position:relative;z-index:1;}
+.cta-title span{background:linear-gradient(135deg,var(--accent),var(--accent3),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.cta-sub{font-size:17px;color:var(--muted);margin-bottom:44px;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:16px;justify-content:center;position:relative;z-index:1;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:34px 56px;display:flex;align-items:center;justify-content:space-between;}
+.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:5px;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.footer-links{display:flex;gap:28px;list-style:none;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:1px;transition:color .3s;cursor:none;}
+.footer-links a:hover{color:var(--accent);}
+.footer-copy{font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;}
+
+/* CREATOR / AFFILIATE CARDS */
+.creator-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:52px;border:1px solid var(--border);}
+.creator-card{background:var(--surface);display:flex;flex-direction:column;position:relative;overflow:hidden;transition:background .4s;}
+.creator-card:hover{background:var(--surface2);}
+.creator-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;transform:scaleX(0);transform-origin:left;transition:transform .5s;}
+.creator-card:first-child::before{background:linear-gradient(90deg,var(--accent),var(--accent3));}
+.creator-card:last-child::before{background:linear-gradient(90deg,var(--gold),#e68900);}
+.creator-card:hover::before{transform:scaleX(1);}
+.creator-card-top{padding:40px 36px 28px;flex:1;}
+.creator-icon{font-size:42px;margin-bottom:16px;display:block;}
+.creator-badge{display:inline-flex;align-items:center;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:4px 12px;margin-bottom:18px;border:1px solid;}
+.creator-badge.yt{color:var(--accent);border-color:rgba(0,240,255,.25);}
+.creator-badge.aff{color:var(--gold);border-color:rgba(255,201,64,.25);}
+.creator-title{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;margin-bottom:10px;color:#fff;}
+.creator-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:22px;}
+.creator-feats{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.creator-feats li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:rgba(232,232,240,.65);line-height:1.4;}
+.creator-feats li .arr{font-family:'Share Tech Mono',monospace;font-size:11px;flex-shrink:0;margin-top:1px;}
+.creator-card-bottom{padding:22px 36px;border-top:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;}
+.creator-reward{display:flex;flex-direction:column;}
+.creator-reward-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:3px;}
+.creator-reward-value{font-family:'Bebas Neue',sans-serif;font-size:28px;background:linear-gradient(135deg,var(--accent),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.creator-reward-value.yt-gold{background:linear-gradient(135deg,var(--gold),#e68900);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.creator-reward-sub{font-size:11px;color:var(--muted);}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:1024px){.mods-grid{grid-template-columns:1fr;}.steps-grid{grid-template-columns:1fr 1fr;}.steps-grid::before{display:none;}.steps-row2{padding:0 5%;grid-template-columns:1fr 1fr;}.buy-modal{max-width:95vw;padding:32px 24px;}.creator-grid{grid-template-columns:1fr;}}
+@media(max-width:768px){nav{padding:14px 20px;}.nav-links{display:none;}.nav-user-email{max-width:110px;}.section{padding:60px 20px;}.how-inner{padding:0 20px;}.hero-stats{gap:24px;flex-wrap:wrap;justify-content:center;}footer{flex-direction:column;gap:16px;text-align:center;}.footer-links{flex-wrap:wrap;justify-content:center;}.cta-btns{flex-direction:column;align-items:center;}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BUY LICENSE MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="buy-modal-overlay" id="buy-modal">
+  <div class="buy-modal">
+    <button class="buy-modal-close" id="buyModalClose">✕</button>
+    <div class="buy-modal-logo">INFINITY MOD</div>
+    <div class="buy-modal-title">BUY LICENSE</div>
+    <div id="buy-mod-badge-wrap"></div>
+    <div class="buy-modal-sub">Payment is processed manually — follow the 5 steps below to receive your personal license key within minutes of payment confirmation.</div>
+
+    <!-- Payment steps -->
+    <div class="pay-steps">
+      <div class="pay-step done">
+        <div class="pay-step-num">01</div>
+        <div class="pay-step-text"><strong>Trial Complete</strong> — You've tested the mod and you're ready to go full license. ✓</div>
+      </div>
+      <div class="pay-step done">
+        <div class="pay-step-num">02</div>
+        <div class="pay-step-text"><strong>Choose Your Mod</strong> — License is locked to one mod and one streamer account. ✓<span class="note">Need multiple mods? Contact us for a bundle deal.</span></div>
+      </div>
+      <div class="pay-step action">
+        <div class="pay-step-num">03</div>
+        <div class="pay-step-text"><strong>Contact Us to Pay</strong> — Reach out on Discord or TikTok below. Tell us which mod you want and we'll send payment details.<span class="note">Response time: usually within 1 hour.</span></div>
+      </div>
+      <div class="pay-step action">
+        <div class="pay-step-num">04</div>
+        <div class="pay-step-text"><strong>Complete Payment &amp; Send Proof</strong> — Transfer the exact amount for your mod (KOTH $35 / SURVIVE $75 / LAST STANDING $45) as instructed, then send a screenshot of your receipt in DM.</div>
+      </div>
+      <div class="pay-step">
+        <div class="pay-step-num">05</div>
+        <div class="pay-step-text"><strong>Receive Your License Key</strong> — After we verify payment, we'll DM your personal key: <code style="font-family:'Share Tech Mono',monospace;color:var(--gold);font-size:12px;">INF-XXXX-XXXX-XXXX</code><span class="note">Lifetime license. Free updates &amp; remote install support included.</span></div>
+      </div>
+    </div>
+
+    <!-- Contact buttons -->
+    <div class="contact-btns">
+      <a href="https://discord.gg/xPKmnfW2" target="_blank" rel="noopener" class="btn-discord">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+        DM on Discord — discord.gg/xPKmnfW2
+      </a>
+      <a href="https://www.tiktok.com/@infinity.gamingg?_r=1&_t=ZS-94LL6nE4AU6" target="_blank" rel="noopener" class="btn-tiktok">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z"/></svg>
+        DM on TikTok — @infinity.gamingg
+      </a>
+    </div>
+
+    <div class="buy-modal-note">
+      🔒 <span>100% Manual &amp; Trusted</span> — Every purchase is handled personally by the developer. You'll always be talking to a real human, not a bot.<br>
+      License keys are delivered within <span>1–3 hours</span> of payment verification.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AUTH MODAL  (original design — Firebase wired to inputs)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-logo">INFINITY MOD</div>
+
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="login">Sign In</button>
+      <button class="modal-tab" data-tab="register">Register</button>
+    </div>
+
+    <!-- LOGIN TAB -->
+    <div class="tab-content active" id="tab-login">
+      <div class="modal-title">WELCOME BACK</div>
+      <div class="modal-sub">Sign in to access your mod licenses</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="li-email" type="email" placeholder="streamer@email.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password"/>
+      </div>
+      <div class="form-error" id="li-error"></div>
+      <button class="btn-submit" id="li-btn">SIGN IN</button>
+
+      <!-- divider -->
+      <div class="modal-divider"><span class="modal-divider-text">OR</span></div>
+      <!-- Google -->
+      <button class="btn-google" id="li-google">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="modal-footer-note"><a href="#" id="forgot-link">Forgot password?</a></div>
+    </div>
+
+    <!-- REGISTER TAB -->
+    <div class="tab-content" id="tab-register">
+      <div class="modal-title">JOIN NOW</div>
+      <div class="modal-sub">Create your account and start your 24-hour free trial</div>
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-input" id="re-name" type="text" placeholder="Your display name" autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">TikTok @Username</label>
+        <input class="form-input" id="re-tiktok" type="text" placeholder="@yourtiktok"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="re-email" type="email" placeholder="streamer@email.com" autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="re-pass" type="password" placeholder="Min. 8 characters" autocomplete="new-password"/>
+      </div>
+      <div class="form-error" id="re-error"></div>
+      <button class="btn-submit" id="re-btn">CREATE ACCOUNT</button>
+
+      <!-- divider + Google -->
+      <div class="modal-divider"><span class="modal-divider-text">OR</span></div>
+      <button class="btn-google" id="re-google">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Sign up with Google
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     NAV
+     ═══════════════════════════════════════════════════════════ -->
+<nav>
+  <a href="#" class="nav-logo">INFINITY MOD</a>
+  <ul class="nav-links">
+    <li><a href="#mods">Mods</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#creators">Creators</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <div class="nav-actions">
+    <!-- shown when logged OUT -->
+    <div id="nav-guest" style="display:flex;gap:12px;align-items:center;">
+      <button class="btn-signin" id="btnSignin">Sign In</button>
+      <button class="btn-getstarted" id="btnStarted">Get Started</button>
+    </div>
+    <!-- shown when logged IN -->
+    <div class="nav-user-wrap" id="nav-user">
+      <div class="nav-user-pill">
+        <span class="nav-user-dot"></span>
+        <span class="nav-user-email" id="nav-email-label">—</span>
+      </div>
+      <button class="btn-signout" id="btnSignout">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-badge"><span class="hero-badge-dot"></span>GTA 5 × TIKTOK LIVE INTERACTIVE MODS</div>
+  <h1 class="hero-title">
+    <span class="title-top">WELCOME TO</span>
+    <span class="title-main" data-text="INFINITY">INFINITY</span>
+  </h1>
+  <p class="hero-sub">Turn your TikTok Live viewers into part of the game. Every gift, follow, and like creates real chaos in Los Santos — real-time, zero delay.</p>
+  <div class="hero-btns">
+    <a href="#mods" class="btn-hp">Browse All Mods</a>
+    <a href="#how" class="btn-hs">How It Works</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-num">3</div><div class="hstat-label">Mods Available</div></div>
+    <div class="hstat"><div class="hstat-num">100%</div><div class="hstat-label">TikTok Live</div></div>
+    <div class="hstat"><div class="hstat-num">24H</div><div class="hstat-label">Free Trial</div></div>
+    <div class="hstat"><div class="hstat-num">10%</div><div class="hstat-label">Affiliate Fee</div></div>
+    <div class="hstat"><div class="hstat-num">FREE</div><div class="hstat-label">Install Help</div></div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div><div class="scroll-txt">SCROLL</div></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item">KOTH MOD<span class="tdot"></span>LAST STANDING<span class="tdot"></span>SURVIVE MOD<span class="tdot"></span>TIKTOK LIVE INTEGRATION<span class="tdot"></span>GIFT TRIGGER EVENTS<span class="tdot"></span>REAL-TIME CHAOS<span class="tdot"></span>WEBHOOK SUPPORT<span class="tdot"></span>FREE TRIAL 24H<span class="tdot"></span>10% AFFILIATE COMMISSION<span class="tdot"></span>YOUTUBE CREATOR PROGRAM<span class="tdot"></span>FREE INSTALL HELP<span class="tdot"></span></div>
+    <div class="ticker-item">KOTH MOD<span class="tdot"></span>LAST STANDING<span class="tdot"></span>SURVIVE MOD<span class="tdot"></span>TIKTOK LIVE INTEGRATION<span class="tdot"></span>GIFT TRIGGER EVENTS<span class="tdot"></span>REAL-TIME CHAOS<span class="tdot"></span>WEBHOOK SUPPORT<span class="tdot"></span>FREE TRIAL 24H<span class="tdot"></span>10% AFFILIATE COMMISSION<span class="tdot"></span>YOUTUBE CREATOR PROGRAM<span class="tdot"></span>FREE INSTALL HELP<span class="tdot"></span></div>
+  </div>
+</div>
+
+<!-- MODS -->
+<div class="section" id="mods">
+  <div class="slabel">Mod Collection</div>
+  <h2 class="stitle">3 INTERACTIVE MODS<br>READY TO USE</h2>
+  <p class="sdesc">Choose the mod that fits your stream style. All mods support TikTok Live integration via webhook.</p>
+  <div class="mods-grid">
+
+    <!-- KOTH -->
+    <div class="mod-card koth reveal">
+      <div class="mod-top">
+        <div class="mod-tag koth"><span class="tag-dot"></span>KING OF THE HILL</div>
+        <span class="mod-icon">👑</span>
+        <div class="mod-name">KOTH MOD</div>
+        <div class="mod-tagline">Hold the hilltop while viewers send vehicles, shields, and chaos to knock you off!</div>
+        <ul class="mod-feats">
+          <li><span class="arr k">→</span>18 vehicles via webhook — Rhino, Tank, Bus, Supercar & more</li>
+          <li><span class="arr k">→</span>Shield system — blocks enemy vehicles, cyan visual effect</li>
+          <li><span class="arr k">→</span>Push & Boost force — shove player off the hill</li>
+          <li><span class="arr k">→</span>Win/Loss counter + progress bar + Daily MVP & Monthly King scoreboard</li>
+          <li><span class="arr k">→</span>Victory fireworks + auto-restart after win</li>
+          <li><span class="arr k">→</span>Custom map XML + NativeUI Menu (F6) + God Mode toggle</li>
+          <li><span class="arr k">→</span>11 character model choices + 20,000 HP health bar</li>
+          <li><span class="arr k">→</span>8 webhook commands: Win, Restart, Shield, Spawn, Push, Boost & more</li>
+        </ul>
+      </div>
+      <div class="mod-bottom">
+        <div class="mod-price-info">
+          <div class="mod-trial">✓ FREE TRIAL 24 HOURS</div>
+          <div class="mod-price">$35 <span class="mod-period">/ license</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+          <button class="btn-mod koth" onclick="onDownloadTrial('koth')" style="font-size:11px;padding:8px 16px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);">⬇ DOWNLOAD TRIAL</button>
+          <button class="btn-mod koth" onclick="onBuyLicense('koth')" style="background:linear-gradient(135deg,var(--gold),#c97800);color:#000;">BUY LICENSE $35</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SURVIVE -->
+    <div class="mod-card survive reveal">
+      <div class="mod-top">
+        <div class="mod-tag survive"><span class="tag-dot"></span>SURVIVAL MODE</div>
+        <span class="mod-icon">🛡️</span>
+        <div class="mod-name">SURVIVE MOD</div>
+        <div class="mod-tagline">Can you survive? Every gift, follow, and like from viewers spawns a new wave of enemies!</div>
+        <ul class="mod-feats">
+          <li><span class="arr s">→</span>5 enemy types — Ground Attacker, Vehicle Crew, Helicopter, Drone, Tank</li>
+          <li><span class="arr s">→</span>Ghost Rider Effect — fire head effect for specific NPCs</li>
+          <li><span class="arr s">→</span>Auto leaderboard Daily/Monthly/All-Time + Top 5 on-screen live</li>
+          <li><span class="arr s">→</span>Viewer names appear above the NPCs they spawn</li>
+          <li><span class="arr s">→</span>Custom health, armor, weapon & spawn count via webhook URL</li>
+          <li><span class="arr s">→</span>Bodyguard system for player protection</li>
+          <li><span class="arr s">→</span>Custom death screen with killer info + score</li>
+          <li><span class="arr s">→</span>Auto-save progress every 20 seconds + daily/monthly auto-reset</li>
+        </ul>
+      </div>
+      <div class="mod-bottom">
+        <div class="mod-price-info">
+          <div class="mod-trial">✓ FREE TRIAL 24 HOURS</div>
+          <div class="mod-price">$75 <span class="mod-period">/ license</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+          <button class="btn-mod survive" onclick="onDownloadTrial('survive')" style="font-size:11px;padding:8px 16px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);">⬇ DOWNLOAD TRIAL</button>
+          <button class="btn-mod survive" onclick="onBuyLicense('survive')">BUY LICENSE $75</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAST STANDING -->
+    <div class="mod-card last reveal">
+      <div class="mod-top">
+        <div class="mod-tag last"><span class="tag-dot"></span>BATTLE ARENA</div>
+        <span class="mod-icon">⚔️</span>
+        <div class="mod-name">LAST STANDING</div>
+        <div class="mod-tagline">Epic NPC battle arena with full scoreboard and cinematic camera for spectacular livestreams!</div>
+        <ul class="mod-feats">
+          <li><span class="arr l">→</span>Full HUD/Scoreboard — Daily, Monthly, All-Time, Timer, +1 Popup</li>
+          <li><span class="arr l">→</span>F6 Position Editor — visually adjust all HUD element positions</li>
+          <li><span class="arr l">→</span>Arena Mode + Cinematic Camera — 5 presets, autoplay, full control</li>
+          <li><span class="arr l">→</span>NPC Battle System — spawn/remove, 35 NPC limit, individual health bars</li>
+          <li><span class="arr l">→</span>20 NPC presets + webhook spawner via HTTP trigger</li>
+          <li><span class="arr l">→</span>Bomb settings — custom explosion type & damage</li>
+          <li><span class="arr l">→</span>Survivor name display + "LAST STANDING" title on-screen</li>
+          <li><span class="arr l">→</span>Auto score update every 10 seconds + F7 Save Scores</li>
+        </ul>
+      </div>
+      <div class="mod-bottom">
+        <div class="mod-price-info">
+          <div class="mod-trial">✓ FREE TRIAL 24 HOURS</div>
+          <div class="mod-price">$45 <span class="mod-period">/ license</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+          <button class="btn-mod last" onclick="onDownloadTrial('last')" style="font-size:11px;padding:8px 16px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);">⬇ DOWNLOAD TRIAL</button>
+          <button class="btn-mod last" onclick="onBuyLicense('last')">BUY LICENSE $45</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- HOW IT WORKS -->
+<div class="how-bg" id="how">
+  <div class="how-inner">
+    <div class="slabel">How It Works</div>
+    <h2 class="stitle">FROM TRIAL TO<br>LICENSE IN 7 STEPS</h2>
+    <p class="sdesc" style="margin-bottom:0;">Try before you buy — download the free trial, test it live, then purchase your personal license in minutes.</p>
+
+    <!-- Row 1: steps 1–4 -->
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Download Trial</div>
+        <p class="step-desc">Register your free account and download the 24-hour trial version of your chosen mod (.dll + .ini files).</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-title">Test in GTA 5</div>
+        <p class="step-desc">Install the mod files into your GTA 5 Story Mode scripts folder. Test every feature and webhook trigger during the 24-hour trial window.</p>
+      </div>
+      <div class="step reveal accent-step">
+        <div class="step-num">03</div>
+        <div class="step-title">Buy License</div>
+        <p class="step-desc">Happy with the mod? Click <strong style="color:var(--gold);">Buy License</strong> on any mod card and choose how to pay — Discord DM or TikTok message.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-title">Contact Us</div>
+        <p class="step-desc">Reach out via Discord <strong style="color:#e8e8f0;">discord.gg/xPKmnfW2</strong> or TikTok <strong style="color:#e8e8f0;">@infinity.gamingg</strong> — tell us which mod you want to purchase.</p>
+      </div>
+
+      <!-- Row 2: steps 5–7 centred inside steps-grid -->
+      <div class="steps-row2">
+        <div class="step reveal">
+          <div class="step-num">05</div>
+          <div class="step-title">Manual Payment</div>
+          <p class="step-desc">We'll send you the payment details (amount &amp; destination). Transfer the exact amount for your chosen mod (KOTH $35 / SURVIVE $75 / LAST STANDING $45) via your preferred payment method as instructed.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">06</div>
+          <div class="step-title">Send Proof</div>
+          <p class="step-desc">Send a screenshot or receipt of your payment back to us on Discord or TikTok DM. We verify every transaction manually.</p>
+        </div>
+        <div class="step reveal accent-step">
+          <div class="step-num">07</div>
+          <div class="step-title">Get Your Key</div>
+          <p class="step-desc">Once payment is confirmed, we'll DM you your personal <strong style="color:var(--gold);">INF-XXXX-XXXX-XXXX</strong> license key — valid for life, one mod, one streamer.</p>
+        </div>
+      </div>
+
+    </div><!-- /steps-grid -->
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- PRICING -->
+<div class="section" id="pricing">
+  <div class="slabel">Pricing</div>
+  <h2 class="stitle">TRANSPARENT PRICING,<br>NO HIDDEN FEES</h2>
+  <p class="sdesc">One license = one mod, forever. Includes free updates &amp; support.</p>
+  <div class="ptable-wrap reveal">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th>FEATURE</th>
+          <th>👑 KOTH MOD</th>
+          <th class="col-feat">🛡️ SURVIVE MOD</th>
+          <th>⚔️ LAST STANDING</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);">PRICE</td>
+          <td><span class="price-cell price-k">$35</span> <span style="color:var(--muted);font-size:11px;">/ license</span></td>
+          <td class="col-feat"><span class="price-cell price-s">$75</span> <span style="color:var(--muted);font-size:11px;">/ license</span></td>
+          <td><span class="price-cell price-l">$45</span> <span style="color:var(--muted);font-size:11px;">/ license</span></td>
+        </tr>
+        <tr><td>Free Trial 24 Hours</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>TikTok Live Integration</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>Webhook Support</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>Scoreboard / Leaderboard</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>Vehicle Spawn via Gift</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cn">—</span></td></tr>
+        <tr><td>NPC Enemy System</td><td><span class="cn">—</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>Cinematic Camera</td><td><span class="cn">—</span></td><td class="col-feat"><span class="cn">—</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>Shield System</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cn">—</span></td><td><span class="cn">—</span></td></tr>
+        <tr><td>Bodyguard System</td><td><span class="cn">—</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cn">—</span></td></tr>
+        <tr><td>Free Remote Installation</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+        <tr><td>Lifetime Updates &amp; Support</td><td><span class="cy">✓</span></td><td class="col-feat"><span class="cy">✓</span></td><td><span class="cy">✓</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="sep"></div>
+
+<!-- CREATOR & AFFILIATE PROGRAM -->
+<div class="section" id="creators">
+  <div class="slabel">Creator Program</div>
+  <h2 class="stitle">GROW WITH US —<br>CREATE &amp; EARN</h2>
+  <p class="sdesc">Two ways to get free access and earn money alongside INFINITY MOD.</p>
+
+  <div class="creator-grid">
+
+    <!-- YouTube Tutorial Card -->
+    <div class="creator-card reveal">
+      <div class="creator-card-top">
+        <div class="creator-icon">🎬</div>
+        <div class="creator-badge yt">CONTENT CREATOR</div>
+        <div class="creator-title">Free 1-Year License</div>
+        <div class="creator-desc">Create a setup and usage tutorial video for YouTube showing how INFINITY MOD works with TikTok Live — and get a full <strong>1-year free license access</strong> as a thank-you.</div>
+        <ul class="creator-feats">
+          <li><span class="arr l">→</span>Record a setup &amp; gameplay tutorial video on YouTube</li>
+          <li><span class="arr l">→</span>Show how to install, configure webhook, and go live</li>
+          <li><span class="arr l">→</span>Minimum 5 minutes — English or Indonesian, any quality</li>
+          <li><span class="arr l">→</span>Include INFINITY MOD link in video description</li>
+          <li><span class="arr l">→</span>Share the video link with us via Discord or TikTok DM</li>
+        </ul>
+      </div>
+      <div class="creator-card-bottom">
+        <div class="creator-reward">
+          <div class="creator-reward-label">YOUR REWARD</div>
+          <div class="creator-reward-value">1 YEAR FREE</div>
+          <div class="creator-reward-sub">Full 1-year license access — any 1 mod</div>
+        </div>
+        <a href="https://discord.gg/xPKmnfW2" target="_blank" rel="noopener" class="btn-mod last" style="text-decoration:none;display:inline-block;padding:12px 22px;">APPLY ON DISCORD</a>
+      </div>
+    </div>
+
+    <!-- Affiliate / Referral Card -->
+    <div class="creator-card reveal">
+      <div class="creator-card-top">
+        <div class="creator-icon">💰</div>
+        <div class="creator-badge aff">AFFILIATE PROGRAM</div>
+        <div class="creator-title">10% Commission Per Sale</div>
+        <div class="creator-desc">Help us spread the word about INFINITY MOD — every time someone buys a license through your referral, you earn 10% of the sale price. No cap, no expiry.</div>
+        <ul class="creator-feats">
+          <li><span class="arr k">→</span>Earn <strong style="color:var(--gold);">10% per license sold</strong> — $3.50 (KOTH), $7.50 (SURVIVE), $4.50 (LAST STANDING)</li>
+          <li><span class="arr k">→</span>Promote via TikTok, YouTube, Telegram, Facebook, or any platform</li>
+          <li><span class="arr k">→</span>Share your referral code with interested streamers</li>
+          <li><span class="arr k">→</span>Buyer mentions your name/code when they DM to pay</li>
+          <li><span class="arr k">→</span>We track manually — commission paid after each confirmed sale</li>
+          <li><span class="arr k">→</span>No limit on how many mods you can refer</li>
+        </ul>
+      </div>
+      <div class="creator-card-bottom">
+        <div class="creator-reward">
+          <div class="creator-reward-label">EARN PER SALE</div>
+          <div class="creator-reward-value yt-gold">UP TO $7.50</div>
+          <div class="creator-reward-sub">10% per sale — varies by mod ($35–$75)</div>
+        </div>
+        <a href="https://discord.gg/xPKmnfW2" target="_blank" rel="noopener" class="btn-mod koth" style="text-decoration:none;display:inline-block;padding:12px 22px;">JOIN AS AFFILIATE</a>
+      </div>
+    </div>
+
+  </div><!-- /creator-grid -->
+</div>
+
+<div class="sep"></div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+  <div class="slabel">FAQ</div>
+  <h2 class="stitle">FREQUENTLY<br>ASKED QUESTIONS</h2>
+  <div class="faq-list">
+    <div class="faq-item reveal"><button class="faq-q"><span>What do I need to run these mods?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">You need GTA 5 for PC, ScriptHookV, ScriptHookVDotNet, and a Tikfinity or IndoFinity account. All supporting software is free. We assist with installation via UltraViewer after purchase.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>How does the 24-hour free trial work?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">After registering your account, you can try your chosen mod for a full 24 hours at no cost. If satisfied, purchase the full license directly by contacting us on Discord or TikTok DM.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>Are the mods compatible with IndoFinity besides Tikfinity?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Yes! The mods use a local HTTP webhook system (localhost:6724) compatible with any platform supporting webhooks — including Tikfinity, IndoFinity, and similar tools.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>Can I use more than one mod at the same time?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Each mod is designed to run separately. You need a license for each mod. For multiple mod purchases, contact us to discuss a bundle deal.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>⚠ Will this mod get me banned from GTA Online?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner"><strong style="color:#ff2d6b;">These mods are strictly for GTA 5 Story Mode only — NEVER use them in GTA Online.</strong> Using any mod in GTA Online violates Rockstar's Terms of Service and WILL result in a permanent ban. INFINITY MOD takes no responsibility for bans caused by misuse. Always launch Story Mode directly and verify you are not connected to GTA Online sessions before activating any mod.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>How do I get installation assistance?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">After purchase, contact us via Discord or TikTok DM. We will schedule a remote assistance session via UltraViewer and help with installation and configuration until everything runs perfectly — 100% free.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>How does the YouTube Creator Program work?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Record a setup and usage tutorial video on YouTube (min. 5 minutes) showing how to install INFINITY MOD and use it during a TikTok Live stream. Include our site link in the description, then send us the video link via Discord or TikTok DM. We'll verify the video and reward you with a full <strong>1-year free license</strong> for any mod of your choice.</div></div></div>
+    <div class="faq-item reveal"><button class="faq-q"><span>How does the 10% affiliate commission work?</span><span class="faq-icon">+</span></button><div class="faq-a"><div class="faq-a-inner">Join our affiliate program by contacting us on Discord. We'll give you a referral code. When someone purchases a mod license and mentions your code in their DM, you earn 10% commission ($3.50 per KOTH, $7.50 per SURVIVE, $4.50 per LAST STANDING license). We track referrals manually and pay out commission after each confirmed sale — no cap, no expiry date.</div></div></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-glow"></div>
+  <h2 class="cta-title">READY TO BRING<br><span>LOS SANTOS</span><br>TO YOUR LIVE?</h2>
+  <p class="cta-sub">Try free for 24 hours. Purchase your license via Discord or TikTok DM.</p>
+  <div class="cta-btns">
+    <button class="btn-hp" onclick="showModal('register')">Start Free Trial</button>
+    <a href="https://discord.gg/xPKmnfW2" target="_blank" rel="noopener" class="btn-discord" style="clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);padding:15px 32px;font-size:14px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      Join Discord
+    </a>
+    <a href="https://www.tiktok.com/@infinity.gamingg?_r=1&_t=ZS-94LL6nE4AU6" target="_blank" rel="noopener" class="btn-tiktok" style="clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);padding:15px 32px;font-size:14px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z"/></svg>
+      TikTok @infinity.gamingg
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">INFINITY MOD</div>
+  <ul class="footer-links">
+    <li><a href="#mods">Mods</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#creators">Creators</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="https://discord.gg/xPKmnfW2" target="_blank" rel="noopener" style="color:#5865F2;">Discord</a></li>
+    <li><a href="https://www.tiktok.com/@infinity.gamingg?_r=1&_t=ZS-94LL6nE4AU6" target="_blank" rel="noopener" style="color:#fff;">TikTok</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 INFINITY MOD. ALL RIGHTS RESERVED.</div>
+  <div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:center;width:100%;letter-spacing:1px;">
+    ⚠ This product is intended for <strong style="color:rgba(232,232,240,0.5);">GTA 5 Story Mode only</strong>. Use in GTA Online may result in bans. The developer is not responsible for misuse.
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast-bar" id="toast"></div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+  ███████╗██╗██████╗ ███████╗██████╗  █████╗ ███████╗███████╗
+  ██╔════╝██║██╔══██╗██╔════╝██╔══██╗██╔══██╗██╔════╝██╔════╝
+  █████╗  ██║██████╔╝█████╗  ██████╔╝███████║███████╗█████╗
+  ██╔══╝  ██║██╔══██╗██╔══╝  ██╔══██╗██╔══██║╚════██║██╔══╝
+  ██║     ██║██║  ██║███████╗██████╔╝██║  ██║███████║███████╗
+  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝  ╚═╝╚══════╝╚══════╝
+  AUTH INTEGRATION  ─  Firebase v9 Modular SDK (CDN)
+  GitHub Pages compatible — no build step needed
+  ═══════════════════════════════════════════════════════════════════════ -->
+<script type="module">
+
+/* ─────────────────────────────────────────────────────────────────────
+   ██████╗  ██████╗ ███╗   ██╗███████╗██╗ ██████╗
+  ██╔════╝ ██╔═══██╗████╗  ██║██╔════╝██║██╔════╝
+  ██║      ██║   ██║██╔██╗ ██║█████╗  ██║██║  ███╗
+  ██║      ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
+  ╚██████╗ ╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
+   ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
+
+  ┌──────────────────────────────────────────────────────────┐
+  │  PASTE YOUR FIREBASE CONFIG HERE                         │
+  │                                                          │
+  │  How to get it:                                          │
+  │  1. Go to https://console.firebase.google.com            │
+  │  2. Open your project → Project Settings (gear icon)     │
+  │  3. Scroll to "Your apps" → click your Web app           │
+  │  4. Copy the firebaseConfig object values below          │
+  └──────────────────────────────────────────────────────────┘ */
+
+const firebaseConfig = {
+  apiKey:            "REPLACE_WITH_YOUR_apiKey",
+  authDomain:        "REPLACE_WITH_YOUR_authDomain",
+  projectId:         "REPLACE_WITH_YOUR_projectId",
+  storageBucket:     "REPLACE_WITH_YOUR_storageBucket",
+  messagingSenderId: "REPLACE_WITH_YOUR_messagingSenderId",
+  appId:             "REPLACE_WITH_YOUR_appId"
+};
+
+/* ─── Firebase SDK (v9 modular, loaded from Google CDN — no npm needed) ─── */
+import { initializeApp }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {
+  getAuth, onAuthStateChanged, signOut,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {
+  getFirestore, doc, setDoc, getDoc, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+/* ─── Init ─────────────────────────────────────────────────────────── */
+const app      = initializeApp(firebaseConfig);
+const auth     = getAuth(app);
+const db       = getFirestore(app);
+const gProvider = new GoogleAuthProvider();
+
+/* ═════════════════════════════════════════════════════════
+   UI HELPERS
+   ═════════════════════════════════════════════════════════ */
+
+const $ = id => document.getElementById(id);
+
+/** Show / hide nav areas based on auth state */
+function setNavState(user) {
+  const guest   = $('nav-guest');
+  const userWrap = $('nav-user');
+  if (user) {
+    guest.style.display = 'none';
+    userWrap.classList.add('visible');
+    $('nav-email-label').textContent = user.email || user.displayName || 'User';
+  } else {
+    guest.style.display = 'flex';
+    userWrap.classList.remove('visible');
+  }
+}
+
+/** Show inline error under a form tab */
+function showErr(id, msg) {
+  const el = $(id);
+  el.textContent = '✕  ' + msg;
+  el.classList.add('show');
+}
+function clearErr(id) {
+  const el = $(id);
+  el.textContent = '';
+  el.classList.remove('show');
+}
+
+/** Bottom toast */
+let toastTimer;
+function toast(msg, type = 'success') {
+  const t = $('toast');
+  clearTimeout(toastTimer);
+  t.textContent = (type === 'success' ? '✓  ' : '✕  ') + msg;
+  t.className   = `toast-bar ${type} show`;
+  toastTimer    = setTimeout(() => t.classList.remove('show'), 3800);
+}
+
+/** Toggle loading state on a submit button */
+function setLoading(btn, loading, label) {
+  btn.disabled    = loading;
+  btn.textContent = loading ? 'PLEASE WAIT...' : label;
+}
+
+/** Close modal */
+function closeModal() { $('modal').classList.remove('active'); }
+
+/** Map Firebase error codes → friendly messages */
+function fbErr(code) {
+  return ({
+    'auth/email-already-in-use':   'This email is already registered. Try signing in.',
+    'auth/invalid-email':          'Please enter a valid email address.',
+    'auth/weak-password':          'Password must be at least 6 characters.',
+    'auth/user-not-found':         'No account found with this email.',
+    'auth/wrong-password':         'Incorrect password. Please try again.',
+    'auth/invalid-credential':     'Incorrect email or password.',
+    'auth/too-many-requests':      'Too many attempts. Please wait a moment.',
+    'auth/popup-closed-by-user':   null,   // silent — user dismissed
+    'auth/network-request-failed': 'Network error. Check your internet connection.',
+  })[code] || 'Something went wrong. Please try again.';
+}
+
+/* ═════════════════════════════════════════════════════════
+   FIRESTORE — save user profile on first sign-up
+   ═════════════════════════════════════════════════════════ */
+
+async function saveProfile(user, extra = {}) {
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      uid:       user.uid,
+      email:     user.email    ?? '',
+      username:  extra.username ?? user.displayName ?? user.email?.split('@')[0] ?? 'user',
+      tiktok:    extra.tiktok   ?? '',
+      photoURL:  user.photoURL  ?? '',
+      createdAt: serverTimestamp(),
+    });
+  }
+}
+
+/* ═════════════════════════════════════════════════════════
+   AUTH STATE OBSERVER  ← runs on every page load
+   Instantly reflects login/logout in the navbar
+   Also handles pending trial/buy actions after login
+   ═════════════════════════════════════════════════════════ */
+
+onAuthStateChanged(auth, user => {
+  setNavState(user);
+  if (user) {
+    closeModal();
+    const pending = localStorage.getItem('pendingMod');
+    const action  = localStorage.getItem('pendingAction');
+    if (pending && action) {
+      localStorage.removeItem('pendingMod');
+      localStorage.removeItem('pendingAction');
+      setTimeout(() => {
+        if (action === 'buy')   window.onBuyLicense(pending);
+        if (action === 'trial') window.onDownloadTrial(pending);
+      }, 300);
+    }
+  }
+});
+
+/* ═════════════════════════════════════════════════════════
+   REGISTER  (email + password)
+   ═════════════════════════════════════════════════════════ */
+
+$('re-btn').addEventListener('click', async () => {
+  clearErr('re-error');
+  const name   = $('re-name').value.trim();
+  const tiktok = $('re-tiktok').value.trim();
+  const email  = $('re-email').value.trim();
+  const pass   = $('re-pass').value;
+
+  // Client-side validation
+  if (!name)            return showErr('re-error', 'Username is required.');
+  if (!email)           return showErr('re-error', 'Email is required.');
+  if (pass.length < 8)  return showErr('re-error', 'Password must be at least 8 characters.');
+
+  setLoading($('re-btn'), true, 'CREATE ACCOUNT');
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await saveProfile(cred.user, { username: name, tiktok });
+    toast('Account created! Welcome to INFINITY MOD.');
+  } catch (e) {
+    const msg = fbErr(e.code);
+    if (msg) showErr('re-error', msg);
+  }
+  setLoading($('re-btn'), false, 'CREATE ACCOUNT');
+});
+
+/* ═════════════════════════════════════════════════════════
+   SIGN IN  (email + password)
+   ═════════════════════════════════════════════════════════ */
+
+$('li-btn').addEventListener('click', async () => {
+  clearErr('li-error');
+  const email = $('li-email').value.trim();
+  const pass  = $('li-pass').value;
+
+  if (!email || !pass) return showErr('li-error', 'Email and password are required.');
+
+  setLoading($('li-btn'), true, 'SIGN IN');
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    toast('Signed in successfully!');
+  } catch (e) {
+    const msg = fbErr(e.code);
+    if (msg) showErr('li-error', msg);
+  }
+  setLoading($('li-btn'), false, 'SIGN IN');
+});
+
+/* Also submit login on Enter key in password field */
+$('li-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') $('li-btn').click();
+});
+$('re-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') $('re-btn').click();
+});
+
+/* ═════════════════════════════════════════════════════════
+   GOOGLE SIGN-IN  (used by both tabs)
+   ═════════════════════════════════════════════════════════ */
+
+async function googleSignIn() {
+  try {
+    const result = await signInWithPopup(auth, gProvider);
+    await saveProfile(result.user);
+    toast('Signed in with Google!');
+  } catch (e) {
+    const msg = fbErr(e.code);
+    if (msg) toast(msg, 'error');
+  }
+}
+
+$('li-google').addEventListener('click', googleSignIn);
+$('re-google').addEventListener('click', googleSignIn);
+
+/* ═════════════════════════════════════════════════════════
+   FORGOT PASSWORD
+   ═════════════════════════════════════════════════════════ */
+
+$('forgot-link').addEventListener('click', async e => {
+  e.preventDefault();
+  clearErr('li-error');
+  const email = $('li-email').value.trim();
+  if (!email) return showErr('li-error', 'Enter your email address above first.');
+  try {
+    await sendPasswordResetEmail(auth, email);
+    toast('Password reset email sent!');
+  } catch (e) {
+    const msg = fbErr(e.code);
+    if (msg) showErr('li-error', msg);
+  }
+});
+
+/* ═════════════════════════════════════════════════════════
+   SIGN OUT
+   ═════════════════════════════════════════════════════════ */
+
+$('btnSignout').addEventListener('click', async () => {
+  await signOut(auth);
+  toast('Signed out.');
+});
+
+/* ═════════════════════════════════════════════════════════
+   DOWNLOAD TRIAL — requires login first
+   ═════════════════════════════════════════════════════════ */
+
+window.onDownloadTrial = function(modType) {
+  if (!auth.currentUser) {
+    localStorage.setItem('pendingMod', modType);
+    localStorage.setItem('pendingAction', 'trial');
+    showModal('register');
+    return;
+  }
+  // ── TRIAL DOWNLOAD LINKS ─────────────────────────────────────────────
+  // Format: https://drive.google.com/uc?export=download&id=FILE_ID
+  // Replace each FILE_ID with the actual Google Drive file ID.
+  //
+  // How to get FILE_ID:
+  //   1. Upload the .zip to Google Drive
+  //   2. Right-click → Share → Anyone with the link (Viewer)
+  //   3. Copy the link: https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+  //   4. Paste just the FILE_ID part below
+  // ─────────────────────────────────────────────────────────────────────
+  const trialLinks = {
+    koth:    'https://drive.google.com/uc?export=download&id=1D8mLGnNzpAEIcjP_0WogQQSmTJI4-88Z',
+    survive: 'https://drive.google.com/uc?export=download&id=1uKk9yvxzGPu6Xzw7kaTY6jRq0U3UN2rk',
+    last:    'https://drive.google.com/uc?export=download&id=1Wvp1pTWkLfxtf9rCZ7BvgL6F6T7gUPLi',
+  };
+  toast(`Starting download for ${modType.toUpperCase()} trial — check your browser downloads!`, 'success');
+  const a = document.createElement('a');
+  a.href = trialLinks[modType];
+  a.target = '_blank';   // opens in new tab if browser blocks auto-download
+  a.rel = 'noopener';
+  a.download = `infinitymod_${modType}_trial.zip`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
+
+/* ═════════════════════════════════════════════════════════
+   BUY LICENSE — open payment modal
+   ═════════════════════════════════════════════════════════ */
+
+const MOD_META = {
+  koth:    { label: '👑 KOTH MOD — $35',  cls: 'koth' },
+  survive: { label: '🛡️ SURVIVE MOD — $75', cls: 'survive' },
+  last:    { label: '⚔️ LAST STANDING — $45', cls: 'last' },
+};
+
+window.onBuyLicense = function(modType) {
+  if (!auth.currentUser) {
+    localStorage.setItem('pendingMod', modType);
+    localStorage.setItem('pendingAction', 'buy');
+    showModal('register');
+    return;
+  }
+  // Populate the badge
+  const meta = MOD_META[modType];
+  const badge = document.getElementById('buy-mod-badge-wrap');
+  badge.innerHTML = `<div class="buy-mod-badge ${meta.cls}">${meta.label} / license</div>`;
+  // Show the modal
+  document.getElementById('buy-modal').classList.add('active');
+};
+
+/* ═════════════════════════════════════════════════════════
+   BUY MODAL  open/close
+   ═════════════════════════════════════════════════════════ */
+
+document.getElementById('buyModalClose').addEventListener('click', () => {
+  document.getElementById('buy-modal').classList.remove('active');
+});
+document.getElementById('buy-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('buy-modal'))
+    document.getElementById('buy-modal').classList.remove('active');
+});
+
+/* ═════════════════════════════════════════════════════════
+   MODAL  show/close  (also exposed globally for onclick)
+   ═════════════════════════════════════════════════════════ */
+
+window.showModal = function(tab) {
+  $('modal').classList.add('active');
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  const target = document.querySelector(`[data-tab="${tab}"]`);
+  if (target) {
+    target.classList.add('active');
+    $('tab-' + tab).classList.add('active');
+  }
+};
+
+$('btnSignin').addEventListener('click',  () => showModal('login'));
+$('btnStarted').addEventListener('click', () => showModal('register'));
+$('modalClose').addEventListener('click', closeModal);
+$('modal').addEventListener('click', e => { if (e.target === $('modal')) closeModal(); });
+
+document.querySelectorAll('.modal-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    tab.classList.add('active');
+    $('tab-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ═════════════════════════════════════════════════════════
+   CURSOR, FAQ, REVEAL  (unchanged originals)
+   ═════════════════════════════════════════════════════════ */
+
+// Custom cursor
+const cur  = $('cursor'), ring = $('ring');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+});
+(function anim(){
+  rx += (mx-rx)*.12; ry += (my-ry)*.12;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(anim);
+})();
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='18px';cur.style.height='18px';ring.style.width='48px';ring.style.height='48px'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='10px';cur.style.height='10px';ring.style.width='32px';ring.style.height='32px'; });
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const was = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!was) item.classList.add('open');
+  });
+});
+
+// Scroll reveal
+const revealObs = new IntersectionObserver(
+  entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+</script>
+</body>
+</html>
